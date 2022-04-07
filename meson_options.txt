@@ -1,0 +1,1 @@
+option('c11threads', type : 'boolean', value : true, description : 'If false, force pthreads instead of c11 threads')
