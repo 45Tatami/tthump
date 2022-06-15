@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 
         //for (int i = 0; i < 1024; i++) {
         for (int i = 0; i < 1; i++) {
-                err = tth_get_thumbnail_async(h, "/tmp/example.mkv", NULL, NULL);
+                err = tth_get_thumbnail_async(h, "large.png", NULL, NULL);
                 if (err < 0) {
                         fprintf(stderr, tth_get_error(err));
                         return 2;

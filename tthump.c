@@ -304,34 +304,33 @@ static int create_thumb(char const *img_path, char const *thmb_path)
         (void) enc;
         (void) thmb_path;
 
-        AVFormatContext *fmt = avformat_alloc_context();
-        if (fmt == NULL) {
+        AVFormatContext *ofmt_ctx = NULL;
+        if ((ret = avformat_alloc_output_context2(&ofmt_ctx, NULL, NULL, thmb_path)) < 0) {
+                fprintf(stderr, "[ERR] Error creating output context:\n\t%s\n",
+                        av_err2str(ret));
                 // TODO
+                return TTH_ERR_COMMON;
         }
 
-        fmt->oformat = NULL; // TODO
-        fmt->pb = NULL;
-        // TODO
-
-        if ((ret = avformat_write_header(fmt, NULL)) < 0) {
+        if ((ret = avformat_write_header(ofmt_ctx, NULL)) < 0) {
                 fprintf(stderr, "[ERR] Error writing thumb header:\n\t%s\n",
                         av_err2str(ret));
-                avformat_free_context(fmt);
+                avformat_free_context(ofmt_ctx);
                 av_frame_unref(dst_frame);
                 return TTH_ERR_COMMON;
         }
 
-        write_frame(fmt, dst_frame);
+        write_frame(ofmt_ctx, dst_frame);
         av_frame_unref(dst_frame);
 
-        if ((ret = av_write_trailer(fmt)) != 0) {
+        if ((ret = av_write_trailer(ofmt_ctx)) != 0) {
                 fprintf(stderr, "[ERR] Error writing thumb header:\n\t%s\n",
                         av_err2str(ret));
-                avformat_free_context(fmt);
+                avformat_free_context(ofmt_ctx);
                 return TTH_ERR_COMMON;
         }
 
-        avformat_free_context(fmt);
+        avformat_free_context(ofmt_ctx);
 
         /*
         // Open dst path and write

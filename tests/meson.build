@@ -33,7 +33,8 @@ test_util_list_exe = executable('tthumb_util_list_test',
 )
 
 test('Errors', test_error_exe)
-test('Async Jobs', test_jobs_exe)
+test('Async Jobs', test_jobs_exe,
+  workdir : meson.current_source_dir())
 
 test('Util - Mtime', test_util_mtime_exe, args : touch.full_path())
 test('Util - MD5', test_util_md5_exe, args : md5sum.full_path())

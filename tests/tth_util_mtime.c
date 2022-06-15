@@ -21,7 +21,7 @@ int main(int argc, char **argv)
                 return 3;
         }
 
-        int ret = system("touch mtime -d @123456");
+        int ret = system("touch -d @123456 mtime");
         if (ret != 0) {
                 if (ret == -1) {
                         printf("Could not run subprocess 'touch':\n\t%s\n",
@@ -35,7 +35,7 @@ int main(int argc, char **argv)
         }
 
         time_t t = get_mtime("mtime");
-        if(t != 123456) {
+        if (t != 123456) {
                 printf("Expected mtime: 123456, Gotten: %ld\n",
                        (unsigned long) t);
                 remove("mtime");
